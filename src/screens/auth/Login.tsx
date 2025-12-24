@@ -179,7 +179,7 @@ export const Login = ({ navigation }: LoginScreenProps) => {
             <View className={`flex items-center justify-center`}>
               <TouchableOpacity
                 className={`bg-[#2a2a2a] w-[100px] h-[100px] items-center justify-center rounded-[10px]`}
-                onPress={() => {}}
+                onPress={handleBiometricLogin}
               >
                 {Platform.OS === "ios" ? (
                   <SvgXml xml={FACEID_SVG} width={50} height={50} />

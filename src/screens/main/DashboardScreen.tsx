@@ -27,6 +27,9 @@ import {
   shouldPromptForBiometrics,
   setLastPromptDate,
 } from "../../utils/biometricPrefs";
+import { AccountCardList } from "../../components/AccountCardList";
+import { ActionRow } from "../../components/ActionRow";
+import { Featured } from "../../components/Featured";
 
 export const DashboardScreen = () => {
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -102,31 +105,11 @@ export const DashboardScreen = () => {
   return (
     <View className={`flex-1 bg-[#fff]`}>
       <StatusBar style="auto" />
-      <View className="py-[20px] px-[20px]">
-        <FlatList
-          data={accounts}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <Animated.View entering={SlideInLeft.delay(Number(item.id) * 100)}>
-              <AccountCard {...item} />
-            </Animated.View>
-          )}
-        />
+      <View className="py-[20px] px-[10px]">
+        <AccountCardList accounts={accounts} />
 
         {/* SFH */}
-        <View className="flex-row mt-5">
-          <TouchableOpacity className="flex-1 flex-row bg-[#2a2a2a] rounded-[20px] h-[60px] items-center justify-center mr-2">
-            <Feather name="send" color="white" size={20} />
-            <Text className="text-[16px] text-white ml-2">Send</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="flex-1 flex-row bg-[#2a2a2a] rounded-[20px] h-[60px] items-center justify-center ml-2">
-            <FontAwesome name="history" size={20} color="white" />
-            <Text className="text-[16px] text-white ml-2">History</Text>
-          </TouchableOpacity>
-        </View>
+        <ActionRow />
 
         {/* TRANSACTION */}
         <View className={`mt-[20px]`}>
@@ -137,6 +120,14 @@ export const DashboardScreen = () => {
           </Text>
           <Transactions />
         </View>
+
+        {/* FEATURES */}
+        <Featured
+          title="Get a Virtual Card"
+          description="Shop online securely with your virtual card"
+          cta="Create now"
+          onPress={() => {}}
+        />
       </View>
     </View>
   );
