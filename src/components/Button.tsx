@@ -13,7 +13,7 @@ export const Button: React.FC<ButtonProps> = ({ title, className = "", loading =
       {...props}
       activeOpacity={0.7}
       disabled={disabled || loading}
-      className={`bg-black p-4 rounded ${disabled || loading ? "opacity-50" : ""} ${className}`}
+      className={`bg-black p-4 rounded-[10px] ${disabled || loading ? "opacity-50" : ""} ${className}`}
     >
       {loading ? (
         <View className="flex-row justify-center items-center">

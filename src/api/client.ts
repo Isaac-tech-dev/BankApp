@@ -4,6 +4,8 @@ export const loginUser = async (username: string, password: string) => {
   const res = await fetch(`${BASE_URL}/users`);
   const users = await res.json();
 
+  console.log(users)
+
   return users.find(
     (u: any) => u.username === username && u.password === password
   );

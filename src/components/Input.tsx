@@ -1,16 +1,38 @@
-import React from "react";
-import { TextInput, TextInputProps } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, TextInputProps, Pressable } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 interface InputProps extends TextInputProps {
   className?: string;
+  isPassword?: boolean; // new prop to indicate password field
 }
 
-export const Input: React.FC<InputProps> = ({ className = "", ...props }) => {
+export const Input: React.FC<InputProps> = ({
+  className = "",
+  isPassword = false,
+  ...props
+}) => {
+  const [secureText, setSecureText] = useState(isPassword);
+
   return (
-    <TextInput
-      {...props}
-      className={`border border-blue-800 p-3 rounded ${className}`}
-      placeholderTextColor="#888"
-    />
+    <View
+      className={`flex-row items-center border border-blue-800 p-3 rounded-[10px] mb-[10px] ${className}`}
+    >
+      <TextInput
+        {...props}
+        className="flex-1"
+        secureTextEntry={secureText}
+        placeholderTextColor="#888"
+      />
+      {isPassword && (
+        <Pressable onPress={() => setSecureText(!secureText)}>
+          <Feather
+            name={secureText ? "eye" : "eye-off"}
+            size={20}
+            color="#555"
+          />
+        </Pressable>
+      )}
+    </View>
   );
 };

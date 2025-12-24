@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { View, Text, Pressable, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  Dimensions,
+  SafeAreaView,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/slice/userSlice";
 import { loginUser } from "../../api/client";
@@ -8,62 +16,217 @@ import { StatusBar } from "expo-status-bar";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { showMessage } from "react-native-flash-message";
+import { useAppDispatch } from "../../redux/hooks/hook";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AuthStackParamList } from "../../navigation/AuthStackNavigation";
+import { Entypo } from "@expo/vector-icons";
+import { SvgXml } from "react-native-svg";
+import { FACEID_SVG, TOUCHID_SVG } from "../../svg";
+import { getCredentials, saveCredentials } from "../../utils/secureStore";
+import { isBiometricEnabled } from "../../utils/biometricPrefs";
+import {
+  authenticateWithBiometrics,
+  hasBiometricHardware,
+  isBiometricEnrolled,
+} from "../../utils/biometrics";
 
-const { width } = Dimensions.get("window");
+type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, "Login">;
 
-export const Login = ({ navigation }: any) => {
+export const Login = ({ navigation }: LoginScreenProps) => {
   const dispatch = useDispatch();
   const storedName = useSelector((s: RootState) => s.user.username);
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(storedName ? storedName : "");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  //Check if Biometric is enabled
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+
+  useEffect(() => {
+    const checkBiometrics = async () => {
+      const supported = await hasBiometricHardware();
+      const enrolled = await isBiometricEnrolled();
+      const enabled = await isBiometricEnabled();
+
+      setIsBiometricSupported(supported && enrolled && enabled);
+    };
+
+    checkBiometrics();
+  }, []);
 
   const handleLogin = async () => {
     setLoading(true);
 
     try {
       const user = await loginUser(username, password);
+
       if (user) {
+        await saveCredentials(username, password);
+        // Extract first and last name if available
+        const [firstname, lastname] = user.name
+          ? user.name.split(" ")
+          : [null, null];
+
+        // Dispatch full user info
+        dispatch(
+          setUser({
+            username: user.username ?? null,
+            email: user.email ?? null,
+            firstname: firstname ?? null,
+            lastname: lastname ?? null,
+            uuid: user.id ?? null,
+            isLoggedIn: true,
+          })
+        );
+
         showMessage({
           message: "Logged In Successfully",
           type: "success",
           duration: 3000,
         });
-        dispatch(
-          setUser({
-            username: username,
-            isLoggedIn: true,
-          })
-        );
-        //navigation.replace("Dashboard");
+      } else {
+        showMessage({
+          message: "Invalid username or password",
+          type: "danger",
+          duration: 3000,
+        });
       }
     } catch (err) {
       console.error(err);
+      showMessage({
+        message: "An error occurred. Please try again.",
+        type: "danger",
+        duration: 3000,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <View className={`flex-1 justify-center px-[10px]`}>
-      <View className={`space-y-[10px]`}>
-        <StatusBar style="auto" />
-        {storedName && (
-          <Text className="text-lg mb-4">Welcome back, {storedName} 👋</Text>
-        )}
+  const handleBiometricLogin = async () => {
+    try {
+      const auth = await authenticateWithBiometrics();
+      if (!auth.success) return;
 
-        <View className={`space-y-[10px]`}>
-          <Input placeholder="Username" onChangeText={setUsername} />
-          <Input
-            placeholder="Password"
-            secureTextEntry
-            onChangeText={setPassword}
-          />
+      const creds = await getCredentials();
+      if (!creds) {
+        showMessage({
+          message: "No saved credentials found",
+          type: "danger",
+        });
+        return;
+      }
+
+      setLoading(true);
+
+      const user = await loginUser(creds.username, creds.password);
+
+      if (user) {
+        const [firstname, lastname] = user.name
+          ? user.name.split(" ")
+          : [null, null];
+
+        dispatch(
+          setUser({
+            username: user.username ?? null,
+            email: user.email ?? null,
+            firstname,
+            lastname,
+            uuid: user.id ?? null,
+            isLoggedIn: true,
+          })
+        );
+      }
+    } catch (err) {
+      showMessage({
+        message: "Biometric authentication failed",
+        type: "danger",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderUserWithData = () => {
+    return (
+      <View className={`flex-1 px-[10px]`}>
+        <View className={`flex-1 items-center justify-center`}>
+          <Text className={`text-[100px] underline italic`}>BA</Text>
         </View>
+        <View className={`flex-1 space-y-[10px]`}>
+          <StatusBar style="auto" />
+          {storedName && (
+            <Text className={`text-[24px] font-bold mb-4`}>
+              Welcome back, {storedName} 👋
+            </Text>
+          )}
 
-        <Button title="Login" onPress={handleLogin} loading={loading} />
+          <View className={``}>
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              onChangeText={setPassword}
+              isPassword
+            />
+          </View>
+
+          <Button title="Login" onPress={handleLogin} loading={loading} />
+
+          {/* ID */}
+          {isBiometricSupported && (
+            <View className={`flex items-center justify-center`}>
+              <TouchableOpacity
+                className={`bg-[#2a2a2a] w-[100px] h-[100px] items-center justify-center rounded-[10px]`}
+                onPress={() => {}}
+              >
+                {Platform.OS === "ios" ? (
+                  <SvgXml xml={FACEID_SVG} width={50} height={50} />
+                ) : (
+                  <SvgXml xml={TOUCHID_SVG} width={50} height={50} />
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+    );
+  };
+
+  const renderUserWithoutData = () => {
+    return (
+      <View className={`flex-1 px-[10px]`}>
+        <View className={`flex-1 items-center justify-center`}>
+          <Text className={`text-[100px] underline italic`}>BA</Text>
+        </View>
+        <View className={`flex-1`}>
+          <StatusBar style="auto" />
+          {storedName && (
+            <Text className={`text-[24px] font-bold mb-4`}>
+              Welcome back, {storedName} 👋
+            </Text>
+          )}
+
+          <View className={``}>
+            <Input placeholder="Username" onChangeText={setUsername} />
+            <Input
+              placeholder="Password"
+              secureTextEntry
+              onChangeText={setPassword}
+              isPassword
+            />
+          </View>
+
+          <Button title="Login" onPress={handleLogin} loading={loading} />
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView className={`flex-1`}>
+      {storedName ? renderUserWithData() : renderUserWithoutData()}
+    </SafeAreaView>
   );
 };

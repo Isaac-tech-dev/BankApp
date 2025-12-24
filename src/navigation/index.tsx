@@ -45,6 +45,7 @@ const Navigation = () => {
         {checkIfUserIsLoggedIn() ? (
           <RootStackNavigation />
         ) : (
+          //<RootStackNavigation />
           <AuthStackNavigation />
         )}
       </NavigationContainer>
