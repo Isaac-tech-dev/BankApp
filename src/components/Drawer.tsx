@@ -1,17 +1,17 @@
-// components/CustomDrawerContent.tsx
-import React from "react";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { EvilIcons, Feather, MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store"; // adjust path
-import { logUserOut } from "../redux/slice/userSlice"; // adjust path
+import { AppDispatch, RootState } from "../redux/store";
+import { logUserOut } from "../redux/slice/userSlice";
 import { useNavigation } from "@react-navigation/native";
 
 export default function CustomDrawerContent(props: any) {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-  const { username } = useSelector((state: RootState) => state.user);
+  const { firstname, lastname } = useSelector(
+    (state: RootState) => state.user
+  );
 
   const handleLogout = () => {
     dispatch(logUserOut());
@@ -25,8 +25,13 @@ export default function CustomDrawerContent(props: any) {
       {/* User Info */}
       <View>
         <View style={styles.profileContainer}>
-          <EvilIcons name="user" size={55} color="#002D62" />
-          <Text style={styles.userName}>{username || "User Name"}</Text>
+          <Image
+            source={{ uri: "https://i.pravatar.cc/150?img=12" }} // replace with user's profile
+            className="w-10 h-10 rounded-full"
+          />
+          <Text style={styles.userName}>
+            {`${firstname} ${lastname}` || "User Name"}
+          </Text>
         </View>
 
         {/* Drawer Items */}

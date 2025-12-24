@@ -17,7 +17,7 @@ export const Featured: React.FC<FeaturedProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="bg-[#F5F5F5] rounded-[20px] p-[16px] mt-[20px]"
+      className="bg-[#F5F5F5] rounded-[20px] p-[16px]"
     >
       <Text className="text-[16px] font-Inter-SemiBold mb-1">
         {title}

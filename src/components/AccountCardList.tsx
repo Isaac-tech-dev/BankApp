@@ -37,19 +37,14 @@ export const AccountCardList: React.FC<Props> = ({ accounts }) => {
         scrollEventThrottle={16}
         renderItem={({ item }) => (
           <Animated.View
-            entering={SlideInLeft.delay(Number(item.id) * 100)}
-            //style={{ width }} // 👈 FULL SCREEN WIDTH
+            entering={SlideInLeft.delay(Math.min(Number(item.id) * 50, 300))} // max 300ms
           >
             <AccountCard {...item} />
           </Animated.View>
         )}
       />
 
-      <PaginationDots
-        data={accounts}
-        scrollX={scrollX}
-        itemWidth={width}
-      />
+      <PaginationDots data={accounts} scrollX={scrollX} itemWidth={width} />
     </View>
   );
 };

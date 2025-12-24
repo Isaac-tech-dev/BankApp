@@ -15,10 +15,10 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-1 flex-row bg-[#2a2a2a] rounded-[20px] h-[60px] items-center justify-center"
+      className="bg-[#F9F9F9] rounded-[7px] h-[80px] w-[80px] items-center justify-center space-y-2"
     >
       {icon}
-      <Text className="text-[16px] text-white ml-2">{label}</Text>
+      <Text className="text-[14px] text-[#111827] font-normal ml-2">{label}</Text>
     </TouchableOpacity>
   );
 };

@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
-  FlatList,
   Text,
   ActivityIndicator,
-  TouchableOpacity,
   Alert,
+  SafeAreaView,
+  RefreshControl,
+  Platform,
+  TouchableOpacity,
+  FlatList,
 } from "react-native";
-import Animated, { SlideInLeft, FadeIn, Layout } from "react-native-reanimated";
-
-import { fetchAccounts } from "../../api/client";
-import { AccountCard } from "../../components/AccountCard";
-import {
-  Feather,
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import Transactions from "../../components/Transactions";
 import { StatusBar } from "expo-status-bar";
+import { fetchAccounts } from "../../api/client";
+import { AccountCardList } from "../../components/AccountCardList";
+import { ActionRow } from "../../components/ActionRow";
+import { Featured } from "../../components/Featured";
+import { DashboardHeader } from "../../components/Header";
 import {
   hasBiometricHardware,
   isBiometricEnrolled,
@@ -27,34 +25,44 @@ import {
   shouldPromptForBiometrics,
   setLastPromptDate,
 } from "../../utils/biometricPrefs";
-import { AccountCardList } from "../../components/AccountCardList";
-import { ActionRow } from "../../components/ActionRow";
-import { Featured } from "../../components/Featured";
+import Transactions from "../../components/Transactions";
 
 export const DashboardScreen = () => {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const loadAccounts = useCallback(async () => {
+    try {
+      const data = await fetchAccounts(1);
+      setAccounts(data);
+      setError(null);
+    } catch (err: any) {
+      console.error(err);
+      setError("Failed to load accounts");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadAccounts();
+  }, [loadAccounts]);
 
   useEffect(() => {
     const askForBiometrics = async () => {
       const shouldAsk = await shouldPromptForBiometrics();
       if (!shouldAsk) return;
-
       const supported = await hasBiometricHardware();
       const enrolled = await isBiometricEnrolled();
-
       if (!supported || !enrolled) return;
-
       Alert.alert(
         "Enable Biometric Login?",
         "Use Face ID / Fingerprint for faster login",
         [
-          {
-            text: "No",
-            style: "cancel",
-            onPress: setLastPromptDate,
-          },
+          { text: "No", style: "cancel", onPress: setLastPromptDate },
           {
             text: "Yes",
             onPress: async () => {
@@ -65,26 +73,13 @@ export const DashboardScreen = () => {
         ]
       );
     };
-
     askForBiometrics();
   }, []);
 
-  useEffect(() => {
-    const loadAccounts = async () => {
-      try {
-        // fetch accounts for userId 1
-        const data = await fetchAccounts(1);
-        setAccounts(data);
-      } catch (err: any) {
-        console.error(err);
-        setError("Failed to load accounts");
-      } finally {
-        setLoading(false);
-      }
-    };
-
+  const onRefresh = () => {
+    setRefreshing(true);
     loadAccounts();
-  }, []);
+  };
 
   if (loading) {
     return (
@@ -103,32 +98,58 @@ export const DashboardScreen = () => {
   }
 
   return (
-    <View className={`flex-1 bg-[#fff]`}>
+    <SafeAreaView
+      className={`flex-1 bg-[#FFFFFF] ${
+        Platform.OS === "ios" ? `` : `pt-[40px]`
+      }`}
+    >
       <StatusBar style="auto" />
-      <View className="py-[20px] px-[10px]">
-        <AccountCardList accounts={accounts} />
+      <FlatList
+        data={[]}
+        renderItem={null}
+        keyExtractor={(_, index) => index.toString()}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
+        ListHeaderComponent={
+          <View className={`px-[10px] space-y-[10px]`}>
+            <DashboardHeader />
 
-        {/* SFH */}
-        <ActionRow />
+            {/* ACCOUNT CARD */}
+            <AccountCardList accounts={accounts} />
 
-        {/* TRANSACTION */}
-        <View className={`mt-[20px]`}>
-          <Text
-            className={`text-light2 text-[13px] mb-[10px] font-Inter-SemiBold`}
-          >
-            Transactions
-          </Text>
-          <Transactions />
-        </View>
+            {/* CTA */}
+            <ActionRow />
 
-        {/* FEATURES */}
-        <Featured
-          title="Get a Virtual Card"
-          description="Shop online securely with your virtual card"
-          cta="Create now"
-          onPress={() => {}}
-        />
-      </View>
-    </View>
+            {/* TRANSACTIONS Header */}
+            <View className="mt-5 flex-row items-center justify-between px-2">
+              <Text className="text-[14px] font-medium">
+                Transactions
+              </Text>
+              <TouchableOpacity>
+                <Text className={`text-[12px] text-[#000A4A] font-normal`}>View all</Text>
+              </TouchableOpacity>
+            </View>
+            {/* TRANSACTIONS COMPONENT */}
+            <Transactions />
+          </View>
+        }
+        ListFooterComponent={
+          <View className={`px-[10px]`}>
+            <View className={`px-2 mt-5`}>
+              <Text className={`text-[14px] text-[#2E3A59] font-medium mb-2`}>
+                Suggested actions
+              </Text>
+              <Featured
+                title="Get a Virtual Card"
+                description="Shop online securely with your virtual card"
+                cta="Create now"
+                onPress={() => {}}
+              />
+            </View>
+          </View>
+        }
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
+    </SafeAreaView>
   );
 };

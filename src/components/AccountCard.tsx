@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, Dimensions } from "react-native";
-import { formatAccountNumber } from "../utils";
+import { View, Text, Dimensions, TouchableOpacity } from "react-native";
+import * as Clipboard from "expo-clipboard";
+import { showMessage } from "react-native-flash-message";
+import { Feather } from "@expo/vector-icons";
+import { getCurrencySymbol } from "../utils";
 
 interface AccountCardProps {
-  bankName: string;
   accountNumber: string;
   accountType: string;
   balance: number;
@@ -14,45 +16,46 @@ interface AccountCardProps {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export const AccountCard: React.FC<AccountCardProps> = ({
-  bankName,
   accountNumber,
   accountType,
   balance,
   currency,
   isPrimary,
 }) => {
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(accountNumber);
+    showMessage({
+      message: "Copied!",
+      description: "Account number copied to clipboard",
+      type: "success",
+      duration: 3000,
+    });
+  };
+
   return (
-    <View style={{ width: SCREEN_WIDTH, paddingHorizontal: 16 }}>
+    <View style={{ width: SCREEN_WIDTH,  }}>
       {/* Card */}
       <View
         className={`rounded-xl p-4 ${
-          isPrimary ? "bg-blue-600" : "bg-gray-800"
-        } px-[15px] py-[10px] w-[350px] justify-center`}
+          isPrimary ? "bg-[#000A4A]" : "bg-[#000A4A]"
+        } px-[15px] py-[10px] w-[380px] justify-center`}
       >
-        {/* Header */}
-        <View className="flex-row justify-between items-center w-full">
-          <Text className="text-white text-lg font-semibold w-2/4">{bankName}</Text>
-
-          {isPrimary && (
-            <Text className="text-yellow-400 font-bold text-sm px-2 py-1 border border-yellow-400 rounded">
-              Primary
-            </Text>
-          )}
-        </View>
-
         {/* Account Info */}
-        <View className="mt-4">
-          <Text className="text-gray-300 text-sm">{accountType}</Text>
-          <Text className="text-white text-base mt-1">
-            {formatAccountNumber(accountNumber)}
-          </Text>
+        <View className="mt-2 flex-row items-center justify-between">
+          <View>
+            <Text className="text-gray-300 text-[16px] font-bold">{accountType}</Text>
+            <Text className="text-white text-[14px] mt-1">{accountNumber}</Text>
+          </View>
+          <TouchableOpacity onPress={copyToClipboard}>
+            <Feather name="copy" size={18} color="white" />
+          </TouchableOpacity>
         </View>
 
         {/* Balance */}
         <View className="mt-auto">
           <Text className="text-gray-300 text-sm">Balance</Text>
           <Text className="text-white text-2xl font-bold mt-1">
-            {currency} {balance.toLocaleString()}
+            {getCurrencySymbol(currency)} {balance.toLocaleString()}
           </Text>
         </View>
       </View>
