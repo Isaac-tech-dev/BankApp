@@ -35,21 +35,44 @@ A mobile banking application built with **React Native (Expo – Classic)** as p
 
 ```txt
 src/
- ├── api/                # API clients and network calls
+ ├── api/                       # API clients and network calls
  │    └── client.ts
- ├── components/         # Reusable UI components
- │    ├── AccountCard.tsx
- │    └── Drawer.tsx
- ├── navigation/         # Navigation configuration
- │    └── AppNavigator.tsx
- ├── redux/              # Redux Toolkit store & slices
- │    ├── store.ts
- │    └── userSlice.ts
- ├── screens/            # App screens
- │    ├── LoginScreen.tsx
- │    └── DashboardScreen.tsx
- ├── types/              # Shared TypeScript types
- │    └── index.ts
- └── utils/              # Utility functions
-      └── biometrics.ts
+ │
+ ├── components/                # Reusable UI components
+ │    ├── home/                 # Home-specific components
+ │    ├── Button.tsx
+ │    ├── Drawer.tsx
+ │    └── Input.tsx
+ │
+ ├── constants/                 # App-wide constants
+ │    └── themes/
+ │         └── index.tsx
+ │
+ ├── navigation/                # Navigation configuration
+ │    ├── AppDrawer.tsx
+ │    ├── AuthStackNavigation.tsx
+ │    ├── RootStackNavigation.tsx
+ │    └── index.tsx
+ │
+ ├── redux/                     # Redux Toolkit store & slices
+ │    ├── hooks/                # Typed Redux hooks
+ │    ├── slice/                # Feature slices (auth, user, accounts)
+ │    └── store.ts
+ │
+ ├── screens/                   # App screens
+ │    ├── auth/                 # Authentication screens
+ │    └── main/                 # Main app screens (Dashboard, Accounts)
+ │
+ ├── svg/                       # SVG icons and assets
+ │    └── index.tsx
+ │
+ ├── types/                     # Shared TypeScript types
+ │
+ ├── utils/                     # Utility helpers
+ │    ├── biometricPrefs.ts
+ │    ├── biometrics.ts
+ │    ├── secureStore.ts
+ │    └── index.tsx
+ │
+ └── app.d.ts                   # Global TypeScript declarations
 App.tsx                  # App entry point
