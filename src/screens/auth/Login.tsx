@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Platform,
+  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/slice/userSlice";
@@ -150,7 +151,11 @@ export const Login = ({ navigation }: LoginScreenProps) => {
     return (
       <View className={`flex-1 px-[10px]`}>
         <View className={`flex-1 items-center justify-center`}>
-          <Text className={`text-[100px] underline italic`}>BA</Text>
+          <Image
+            source={require("../../../assets/images/onboarding/ruach.png")}
+            className={`w-[300px] h-[300px] rounded-full`}
+            resizeMode="contain"
+          />
         </View>
         <View className={`flex-1 space-y-[10px]`}>
           <StatusBar style="auto" />
@@ -160,22 +165,32 @@ export const Login = ({ navigation }: LoginScreenProps) => {
             </Text>
           )}
 
-          <View className={``}>
+          <View style={{gap: 12}}>
             <Input
               placeholder="Password"
               secureTextEntry
               onChangeText={setPassword}
               isPassword
             />
+            <TouchableOpacity className={`items-end`}>
+              <Text className={`text-[14px] font-semibold`}>
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          <Button title="Login" onPress={handleLogin} loading={loading} />
+          <Button
+            title="Login"
+            onPress={handleLogin}
+            loading={loading}
+            className={`bg-[#1F195F]`}
+          />
 
           {/* ID */}
           {isBiometricSupported && (
             <View className={`flex items-center justify-center`}>
               <TouchableOpacity
-                className={`bg-[#2a2a2a] w-[100px] h-[100px] items-center justify-center rounded-[10px]`}
+                className={`w-[100px] h-[100px] items-center justify-center rounded-[10px]`}
                 onPress={handleBiometricLogin}
               >
                 {Platform.OS === "ios" ? (
@@ -195,7 +210,11 @@ export const Login = ({ navigation }: LoginScreenProps) => {
     return (
       <View className={`flex-1 px-[10px]`}>
         <View className={`flex-1 items-center justify-center`}>
-          <Text className={`text-[100px] underline italic`}>BA</Text>
+          <Image
+            source={require("../../../assets/images/onboarding/ruach.png")}
+            className={`w-[300px] h-[300px] rounded-full`}
+            resizeMode="contain"
+          />
         </View>
         <View className={`flex-1`}>
           <StatusBar style="auto" />
@@ -205,17 +224,31 @@ export const Login = ({ navigation }: LoginScreenProps) => {
             </Text>
           )}
 
-          <View className={``}>
-            <Input placeholder="Username" onChangeText={setUsername} />
+          <View className={`mb-[10px]`} style={{ gap: 10 }}>
+            <Input
+              placeholder="Username"
+              onChangeText={setUsername}
+              className="mb-[15px]"
+            />
             <Input
               placeholder="Password"
               secureTextEntry
               onChangeText={setPassword}
               isPassword
             />
+            <TouchableOpacity className={`items-end`}>
+              <Text className={`text-[14px] font-semibold`}>
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          <Button title="Login" onPress={handleLogin} loading={loading} />
+          <Button
+            title="Login"
+            onPress={handleLogin}
+            loading={loading}
+            className={`bg-[#1F195F]`}
+          />
         </View>
       </View>
     );

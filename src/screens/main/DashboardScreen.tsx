@@ -34,6 +34,7 @@ import { DrawerParamList } from "../../navigation/AppDrawer";
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { RootStackParamList } from "../../navigation/RootStackNavigation";
+import { useAppSelector } from "../../redux/hooks/hook";
 
 type DashboardNavigationProp = CompositeNavigationProp<
   DrawerNavigationProp<DrawerParamList, "Dashboard">,
@@ -46,6 +47,7 @@ type DashboardScreenProps = {
 };
 
 export const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
+  const user = useAppSelector((state) => state.user);
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -53,12 +55,12 @@ export const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
 
   const loadAccounts = useCallback(async () => {
     try {
-      const data = await fetchAccounts(1);
+      const data = await fetchAccounts(user.uuid);
       setAccounts(data);
       setError(null);
     } catch (err: any) {
       console.error(err);
-      setError("Failed to load accounts");
+      setError("Failed to load accounts || No accounts available");
     } finally {
       setLoading(false);
       setRefreshing(false);
