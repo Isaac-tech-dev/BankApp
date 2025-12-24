@@ -5,9 +5,14 @@ import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { getGreeting } from "../../utils";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { DrawerParamList } from "../../navigation/AppDrawer";
 
-export const DashboardHeader = () => {
-  const navigation = useNavigation();
+type DashboardHeaderProps = {
+  navigation: DrawerNavigationProp<DrawerParamList>;
+};
+
+export const DashboardHeader = ({ navigation }: DashboardHeaderProps) => {
   const { username } = useSelector((state: RootState) => state.user);
 
   return (

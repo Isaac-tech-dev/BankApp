@@ -26,8 +26,26 @@ import {
   setLastPromptDate,
 } from "../../utils/biometricPrefs";
 import Transactions from "../../components/home/Transactions";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
+import { DrawerParamList } from "../../navigation/AppDrawer";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { RootStackParamList } from "../../navigation/RootStackNavigation";
 
-export const DashboardScreen = () => {
+type DashboardNavigationProp = CompositeNavigationProp<
+  DrawerNavigationProp<DrawerParamList, "Dashboard">,
+  NativeStackNavigationProp<RootStackParamList, "AppDrawer">
+>;
+
+type DashboardScreenProps = {
+  navigation: DashboardNavigationProp;
+  route?: any;
+};
+
+export const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -112,7 +130,7 @@ export const DashboardScreen = () => {
         refreshing={refreshing}
         ListHeaderComponent={
           <View className={`px-[10px] space-y-[10px]`}>
-            <DashboardHeader />
+            <DashboardHeader navigation={navigation} />
 
             {/* ACCOUNT CARD */}
             <AccountCardList accounts={accounts} />
@@ -122,11 +140,11 @@ export const DashboardScreen = () => {
 
             {/* TRANSACTIONS Header */}
             <View className="mt-5 flex-row items-center justify-between px-2">
-              <Text className="text-[14px] font-medium">
-                Transactions
-              </Text>
+              <Text className="text-[14px] font-medium">Transactions</Text>
               <TouchableOpacity>
-                <Text className={`text-[12px] text-[#000A4A] font-normal`}>View all</Text>
+                <Text className={`text-[12px] text-[#000A4A] font-normal`}>
+                  View all
+                </Text>
               </TouchableOpacity>
             </View>
             {/* TRANSACTIONS COMPONENT */}

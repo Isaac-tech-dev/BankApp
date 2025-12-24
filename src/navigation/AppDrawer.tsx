@@ -3,7 +3,10 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DashboardScreen } from "../screens/main/DashboardScreen";
 import CustomDrawerContent from "../components/Drawer";
 
-const Drawer = createDrawerNavigator();
+export type DrawerParamList = {
+  Dashboard: undefined;
+};
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
 const AppDrawer = () => {
   return (
