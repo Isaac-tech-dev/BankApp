@@ -12,10 +12,10 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { fetchAccounts } from "../../api/client";
-import { AccountCardList } from "../../components/AccountCardList";
-import { ActionRow } from "../../components/ActionRow";
-import { Featured } from "../../components/Featured";
-import { DashboardHeader } from "../../components/Header";
+import { AccountCardList } from "../../components/home/AccountCardList";
+import { ActionRow } from "../../components/home/ActionRow";
+import { Featured } from "../../components/home/Featured";
+import { DashboardHeader } from "../../components/home/Header";
 import {
   hasBiometricHardware,
   isBiometricEnrolled,
@@ -25,7 +25,7 @@ import {
   shouldPromptForBiometrics,
   setLastPromptDate,
 } from "../../utils/biometricPrefs";
-import Transactions from "../../components/Transactions";
+import Transactions from "../../components/home/Transactions";
 
 export const DashboardScreen = () => {
   const [accounts, setAccounts] = useState<any[]>([]);

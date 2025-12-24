@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { ActionButton } from "./ActionButton";
 import { SvgXml } from "react-native-svg";
-import { CARD, FUND, PAY, WITHDRAW } from "../svg";
+import { CARD, FUND, PAY, WITHDRAW } from "../../svg";
 
 export const ActionRow = () => {
   return (

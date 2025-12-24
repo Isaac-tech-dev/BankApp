@@ -1,9 +1,15 @@
 import React from "react";
-import { View, Text, Dimensions, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { showMessage } from "react-native-flash-message";
 import { Feather } from "@expo/vector-icons";
-import { getCurrencySymbol } from "../utils";
+import { getCurrencySymbol } from "../../utils";
 
 interface AccountCardProps {
   accountNumber: string;
@@ -14,6 +20,8 @@ interface AccountCardProps {
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const CARD_HORIZONTAL_MARGIN = 12;
+const CARD_WIDTH = SCREEN_WIDTH - (CARD_HORIZONTAL_MARGIN * 2);
 
 export const AccountCard: React.FC<AccountCardProps> = ({
   accountNumber,
@@ -33,17 +41,23 @@ export const AccountCard: React.FC<AccountCardProps> = ({
   };
 
   return (
-    <View style={{ width: SCREEN_WIDTH,  }}>
+    <View style={styles.container}>
       {/* Card */}
       <View
-        className={`rounded-xl p-4 ${
-          isPrimary ? "bg-[#000A4A]" : "bg-[#000A4A]"
-        } px-[15px] py-[10px] w-[380px] justify-center`}
+        style={[
+          styles.card,
+          {
+            width: CARD_WIDTH,
+            backgroundColor: isPrimary ? "#000A4A" : "#000A4A",
+          },
+        ]}
       >
         {/* Account Info */}
         <View className="mt-2 flex-row items-center justify-between">
           <View>
-            <Text className="text-gray-300 text-[16px] font-bold">{accountType}</Text>
+            <Text className="text-gray-300 text-[16px] font-bold">
+              {accountType}
+            </Text>
             <Text className="text-white text-[14px] mt-1">{accountNumber}</Text>
           </View>
           <TouchableOpacity onPress={copyToClipboard}>
@@ -62,3 +76,17 @@ export const AccountCard: React.FC<AccountCardProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: SCREEN_WIDTH,
+    //alignItems: "center",
+  },
+  card: {
+    borderRadius: 12,
+    paddingHorizontal: SCREEN_WIDTH * 0.04, // 4% of screen width
+    paddingVertical: SCREEN_WIDTH * 0.05, // 5% of screen width
+    minHeight: 160,
+    justifyContent: "space-between",
+  },
+});

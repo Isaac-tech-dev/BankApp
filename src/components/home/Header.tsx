@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { getGreeting } from "../utils";
+import { RootState } from "../../redux/store";
+import { getGreeting } from "../../utils";
 
 export const DashboardHeader = () => {
   const navigation = useNavigation();

@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { OnboardingData, onboardingData } from "../../constants";
@@ -35,7 +36,15 @@ const Onboarding = ({ navigation }: OnboardingScreenProps) => {
         source={item.image}
         resizeMode="contain"
         className={`w-full h-[650px] ${
-          currentIndex === 0 ? `mt-[90px]` : `mt-[20px]`
+          Platform.OS === "android"
+            ? currentIndex === 0
+              ? "mt-[90px]"
+              : currentIndex === 1
+              ? "mt-[40px]"
+              : currentIndex === 2
+              ? "mt-[40px]"
+              : ""
+            : "mt-[10px]"
         }`}
       />
       <Image
@@ -95,9 +104,7 @@ const Onboarding = ({ navigation }: OnboardingScreenProps) => {
 
         {/* Bottom Panel */}
         <View className="">
-          <TouchableOpacity
-            className="bg-[#1F195F] py-4 rounded-lg mb-3"
-          >
+          <TouchableOpacity className="bg-[#1F195F] py-4 rounded-lg mb-3">
             <Text className="text-white text-center font-semibold">
               Create an account
             </Text>

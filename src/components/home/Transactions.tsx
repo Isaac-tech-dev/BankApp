@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { SvgXml } from "react-native-svg";
-import { Transaction, transactionData } from "../constants/index";
+import { Transaction, transactionData } from "../../constants/index";
 import { Entypo } from "@expo/vector-icons";
 
 const renderTransactionItem: ListRenderItem<Transaction> = ({ item }) => {
