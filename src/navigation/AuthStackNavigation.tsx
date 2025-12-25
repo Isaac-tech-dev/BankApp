@@ -15,6 +15,7 @@ const AuthStack = createStackNavigator<AuthStackParamList>();
 
 const AuthStackNavigator = () => {
   const user = useAppSelector((state) => state.user);
+  
 
   return (
     <AuthStack.Navigator

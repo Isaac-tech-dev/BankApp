@@ -28,6 +28,7 @@ import {
   hasBiometricHardware,
   isBiometricEnrolled,
 } from "../../utils/biometrics";
+import { saveUsername } from "../../utils/storage";
 
 type LoginScreenProps = NativeStackScreenProps<AuthStackParamList, "Login">;
 
@@ -66,6 +67,7 @@ export const Login = ({ navigation }: LoginScreenProps) => {
         const [firstname, lastname] = user.name
           ? user.name.split(" ")
           : [null, null];
+        await saveUsername(username);
 
         // Dispatch full user info
         dispatch(
@@ -165,7 +167,7 @@ export const Login = ({ navigation }: LoginScreenProps) => {
             </Text>
           )}
 
-          <View style={{gap: 12}}>
+          <View style={{ gap: 12 }}>
             <Input
               placeholder="Password"
               secureTextEntry

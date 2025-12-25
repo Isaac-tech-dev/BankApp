@@ -6,7 +6,7 @@ export type UserState = {
   firstname?: string | null;
   lastname?: string | null;
   uuid?: string | null;
-  isLoggedIn: boolean
+  isLoggedIn?: boolean
   // you can add other auth fields if needed, e.g., isLoggedIn, token
 }
 
