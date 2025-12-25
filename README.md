@@ -104,8 +104,8 @@ App.tsx                  # App entry point
 
 ```txt
 username: Isaac
-password: 123456
+password: Is@ac_98
 
 username: Mikolz
-password: 123456
+password: M!k0l$
 ```

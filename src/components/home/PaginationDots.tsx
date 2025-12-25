@@ -4,11 +4,12 @@ import Animated, {
   useAnimatedStyle,
   interpolate,
   Extrapolate,
+  SharedValue
 } from "react-native-reanimated";
 
 interface Props {
   data: any[];
-  scrollX: Animated.SharedValue<number>;
+  scrollX: SharedValue<number>;
   itemWidth: number;
 }
 

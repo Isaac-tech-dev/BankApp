@@ -4,7 +4,7 @@ export const loginUser = async (username: string, password: string) => {
   const res = await fetch(`${BASE_URL}/users`);
   const users = await res.json();
 
-  console.log(users)
+  console.log(users);
 
   return users.find(
     (u: any) => u.username === username && u.password === password
@@ -12,10 +12,17 @@ export const loginUser = async (username: string, password: string) => {
 };
 
 export const fetchAccounts = async (userId: number | string) => {
-  const res = await fetch(`${BASE_URL}/accounts?userId=${userId}`);
-  console.log(res)
+  const res = await fetch(`${BASE_URL}/accounts`); // fetch all accounts
   if (!res.ok) {
     throw new Error("Failed to fetch accounts");
   }
-  return res.json();
+
+  const accounts = await res.json();
+  // Find the account for the logged-in user
+  const userAccount = accounts.filter(
+    (account: any) => account.userId == userId
+  );
+  console.log(userAccount);
+
+  return userAccount; // returns first match or undefined
 };
