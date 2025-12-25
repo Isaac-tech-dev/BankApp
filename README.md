@@ -47,14 +47,11 @@ Make sure you have the following installed:
 
   ```bash
   npm install -g expo-cli
-
   git clone https://github.com/Isaac-tech-dev/BankApp.git
   cd BankApp
+  yarn install
+  yarn start
   ```
-
-yarn install
-
-yarn start
 
 ## 📁 Project Structure
 
