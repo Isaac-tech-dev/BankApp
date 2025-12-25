@@ -99,3 +99,13 @@ src/
  └── app.d.ts                   # Global TypeScript declarations
 App.tsx                  # App entry point
 ```
+
+## Credentials
+
+```txt
+username: Isaac
+password: 123456
+
+username: Mikolz
+password: 123456
+```
