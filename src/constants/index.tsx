@@ -57,11 +57,11 @@ export const onboardingData: OnboardingData[] = [
     image: require("../../assets/images/onboarding/device.png"),
     backgroundColor: "#4285F4",
   },
-  {
-    id: 3,
-    title: "A virtual USD card for your payments",
-    subtitle: "Shop globally. Renew your subscriptions with ease.",
-    image: require("../../assets/images/onboarding/card.png"),
-    backgroundColor: "#AF72DB",
-  },
+  // {
+  //   id: 3,
+  //   title: "A virtual USD card for your payments",
+  //   subtitle: "Shop globally. Renew your subscriptions with ease.",
+  //   image: require("../../assets/images/onboarding/card.png"),
+  //   backgroundColor: "#AF72DB",
+  // },
 ];

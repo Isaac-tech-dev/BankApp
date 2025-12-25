@@ -31,6 +31,31 @@ A mobile banking application built with **React Native (Expo – Classic)** as p
 
 ---
 
+## 🚀 Getting Started (Development Setup)
+
+Follow the steps below to run the project locally.
+
+---
+
+### 📋 Prerequisites
+
+Make sure you have the following installed:
+
+- **Node.js** (v18+ or v20 recommended)
+- **Yarn** (v1.22.x)
+- **Expo CLI**
+
+  ```bash
+  npm install -g expo-cli
+
+  git clone https://github.com/Isaac-tech-dev/BankApp.git
+  cd BankApp
+  ```
+
+yarn install
+
+yarn start
+
 ## 📁 Project Structure
 
 ```txt
@@ -76,3 +101,4 @@ src/
  │
  └── app.d.ts                   # Global TypeScript declarations
 App.tsx                  # App entry point
+```
